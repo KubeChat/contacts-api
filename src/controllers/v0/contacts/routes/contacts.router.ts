@@ -33,4 +33,19 @@ router.post('/', verifyToken, async (req: any, res: Response) => {
     await Contact.create({userEmail: email, contactEmail, contactName});
     res.sendStatus(201);
 });
+
+
+router.put('/image', verifyToken, async (req: any, res: Response) => {
+    const { email, picture } = req.user;
+
+    const user: UserImage = await UserImage.findByPk(email);
+    if (!user) {
+        await UserImage.create({email, imageUrl: picture});
+    } else {
+        await UserImage.update({imageUrl: picture}, {where: {email}});
+    }
+    
+    res.sendStatus(204);
+});
+
 export const ContactsRouter: Router = router;
