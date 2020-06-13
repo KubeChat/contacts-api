@@ -1,12 +1,14 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 
 import { Contact } from '../models/Contact';
 import { UserImage } from '../models/UserImage';
+import { verifyToken } from '../../../../middlewares/jwt';
 
 const router: Router = Router();
 
-router.get('/:email', async (req: Request, res: Response) => {
-    let { email } = req.params;
+router.get('/', verifyToken, async (req: any, res: Response) => {
+    const { email } = req.user;
+
     const contacts: Contact[]= await Contact.findAll({
         where: {userEmail: email},
         include: [UserImage]

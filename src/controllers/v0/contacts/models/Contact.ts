@@ -1,7 +1,7 @@
 import {Table, Column, Model, PrimaryKey, AutoIncrement, BelongsTo, ForeignKey} from 'sequelize-typescript';
 import { UserImage } from './UserImage';
 
-@Table({ indexes: [{ unique: false, fields: ['userEmail'] },] })
+@Table({ tableName: 'contacts', indexes: [{ unique: false, fields: ['user_email'] },] })
 export class Contact extends Model<Contact> {
   
   @PrimaryKey
@@ -9,17 +9,17 @@ export class Contact extends Model<Contact> {
   @Column
   public id!: number;
 
-  @Column
+  @Column({field: 'user_email'})
   public userEmail!: string;
 
   @ForeignKey(() => UserImage)
-  @Column
+  @Column({field: 'contact_email'})
   public contactEmail!: string;
 
   @BelongsTo(() => UserImage)
   public contactImage?: UserImage;
 
-  @Column
+  @Column({field: 'contact_name'})
   public contactName!: string;
 
   short() {
