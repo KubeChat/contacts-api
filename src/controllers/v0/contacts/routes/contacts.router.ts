@@ -13,7 +13,24 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
         where: {userEmail: email},
         include: [UserImage]
     });
-    res.send(contacts.map(contact => contact.short()));
+    res.status(200).send(contacts.map(contact => contact.short()));
 });
 
+
+router.post('/', verifyToken, async (req: any, res: Response) => {
+    const { email } = req.user;
+    const { contactEmail, contactName } = req.body;
+
+    if (!contactEmail || !contactName) {
+        return res.status(400).send({message: 'contact name and email must be provided.'});
+    }
+
+    const user = await UserImage.findByPk(contactEmail);
+    if (!user) {
+        await UserImage.create({email: contactEmail});
+    }
+
+    await Contact.create({userEmail: email, contactEmail, contactName});
+    res.sendStatus(201);
+});
 export const ContactsRouter: Router = router;
