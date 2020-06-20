@@ -25,7 +25,8 @@ export class Contact extends Model<Contact> {
   short() {
     return {
       name: this.contactName,
-      imageUrl: this.contactImage.imageUrl
+      imageUrl: this.contactImage.imageUrl,
+      contactEmail: this.contactEmail
     }
   }
 }
