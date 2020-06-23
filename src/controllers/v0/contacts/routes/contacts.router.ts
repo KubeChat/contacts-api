@@ -18,7 +18,7 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
 
 
 router.post('/', verifyToken, async (req: any, res: Response) => {
-    const { email } = req.user;
+    const { email, name } = req.user;
     const { contactEmail, contactName } = req.body;
 
     if (!contactEmail || !contactName) {
@@ -31,11 +31,13 @@ router.post('/', verifyToken, async (req: any, res: Response) => {
     }
 
     await Contact.create({userEmail: email, contactEmail, contactName});
+    await Contact.create({userEmail: contactEmail, contactEmail: email, contactName: name});
+
     res.sendStatus(201);
 });
 
 
-router.put('/image', verifyToken, async (req: any, res: Response) => {
+router.put('/pictures', verifyToken, async (req: any, res: Response) => {
     const { email, picture } = req.user;
 
     const user: UserImage = await UserImage.findByPk(email);
